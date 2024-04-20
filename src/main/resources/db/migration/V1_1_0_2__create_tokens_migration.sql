@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS tokens CASCADE;
 CREATE TABLE tokens (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
