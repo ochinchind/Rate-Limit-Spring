@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS tokens CASCADE;
 CREATE TABLE tokens (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL,
     token VARCHAR(500) NOT NULL,
     expiration TIMESTAMP NOT NULL
 );

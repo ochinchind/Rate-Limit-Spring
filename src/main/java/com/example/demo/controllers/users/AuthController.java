@@ -3,6 +3,7 @@ package com.example.demo.controllers.users;
 import com.example.demo.entities.users.User;
 import com.example.demo.services.users.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +18,12 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User newUser) {
-        authService.registerUser(newUser);
-        return ResponseEntity.ok("User registered successfully");
+        try {
+            String jwtToken = authService.registerUser(newUser);
+            return ResponseEntity.ok().header("Authorization", "Bearer " + jwtToken).body("User registered successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
     }
 }
