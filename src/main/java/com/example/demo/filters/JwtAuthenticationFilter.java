@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.filters;
 
 import com.example.demo.entities.users.User;
 import com.example.demo.services.users.AuthenticationService;
