@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  myapp:
+    image: myorg/myapp
+    build:
+      context: .
+      args:
+        JAR_FILE: target/*.jar
+    ports:
+      - "8080:8080"
+    volumes:
+      - /tmp
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/superapp
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_DATASOURCE_DRIVE-CLASS-NAME=org.postgresql.Driver
+      - SPRING_FLYWAY_URL=jdbc:postgresql://db:5432/superapp
+      - SPRING_FLYWAY_USER=postgres
+      - SPRING_FLYWAY_PASSWORD=postgres
+      - SPRING_FLYWAY_ENABLED=false
+      - SPRING_FLYWAY_BASELINE-ON-MIGRATE=true
+      - SPRING_FLYWAY_TABLE=flyway_schema_history
+      - SPRING_FLYWAY_BASELINE-VERSION=0
+      - SPRING_JPA_HIBERNATE_DDL-AUTO=validate
+  db:
+    image: postgres
+    container_name: db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: superapp
+    ports:
+      - "5436:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
