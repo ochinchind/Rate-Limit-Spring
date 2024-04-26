@@ -1,4 +1,4 @@
-package com.example.demo.controllers.users;
+package com.example.demo.controllers.api.auth;
 
 import com.example.demo.entities.users.User;
 import com.example.demo.services.users.AuthenticationService;

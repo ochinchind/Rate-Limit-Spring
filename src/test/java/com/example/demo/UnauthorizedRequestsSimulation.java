@@ -11,7 +11,7 @@ public class UnauthorizedRequestsSimulation extends Simulation  {
 
     ChainBuilder browse =
             // Note how we force the counter name, so we can reuse it
-            repeat(12, "i").on(
+            repeat(100, "i").on(
                     http("Page #{i}").get("/api/greeting"),
                     pause(1)
             );
@@ -29,7 +29,7 @@ public class UnauthorizedRequestsSimulation extends Simulation  {
 
     {
         setUp(
-                users.injectOpen(rampUsers(10).during(15))
+                users.injectOpen(rampUsers(1).during(15))
         ).protocols(httpProtocol);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.demo.controllers.greeting;
+package com.example.demo.controllers.api.greeting;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
