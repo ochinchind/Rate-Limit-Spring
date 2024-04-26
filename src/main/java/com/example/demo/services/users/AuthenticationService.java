@@ -21,75 +21,18 @@ import java.util.Date;
 import java.util.Optional;
 
 @Service
-public class AuthenticationService implements UserDetailsService {
+public class AuthenticationService {
     @Autowired
     private UserRepository userRepository;
-
-    @Value("${jwt.secret}")
-    private String jwtSecret;
-
-    @Value("${jwt.expiration}")
-    private int jwtExpirationMs;
-
-    @Autowired
-    private TokenRepository tokenRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public String generateJwtToken(UserDetails userDetails) {
-        String token = Jwts.builder()
-                .setSubject((userDetails.getUsername()))
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
-                .compact();
-
-        return token;
-    }
-
-    public UserDetails getUserDetailsFromJwtToken(String token) {
-        String username = Jwts.parser()
-                .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
-
-        return new org.springframework.security.core.userdetails.User(username, "", new ArrayList<>());
-    }
-
-
-    public boolean validateJwtToken(String authToken) {
-        try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
-            return true;
-        } catch (MalformedJwtException e) {
-            // Invalid JWT token
-            // log.error("Invalid JWT token: {}", e.getMessage());
-        } catch (ExpiredJwtException e) {
-            // JWT token is expired
-            // log.error("JWT token is expired: {}", e.getMessage());
-        } catch (UnsupportedJwtException e) {
-            // JWT token is unsupported
-            // log.error("JWT token is unsupported: {}", e.getMessage());
-        } catch (IllegalArgumentException e) {
-            // JWT claims string is empty
-            // log.error("JWT claims string is empty: {}", e.getMessage());
-        }
-
-        return false;
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(), user.getPassword(), new ArrayList<>());
-    }
+    @Autowired
+    private UserService userService;
 
     public String registerUser(User user) {
-        Optional<Object> existingUser = userRepository.findByEmail(user.getEmail());
+        Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
         if (existingUser.isPresent()) {
             // User with the same email already exists, return an error message or throw an exception
             throw new IllegalArgumentException("Email is already in use");
@@ -99,22 +42,31 @@ public class AuthenticationService implements UserDetailsService {
         user.setPassword(encodedPassword);
         userRepository.save(user);
         // Generate JWT token for the registered user
-        String jwtToken = this.generateJwtToken(new org.springframework.security.core.userdetails.User(user.getUsername(), "", new ArrayList<>()));
+        String jwtToken = userService.generateJwtToken(new org.springframework.security.core.userdetails.User(user.getUsername(), "", new ArrayList<>()));
 
-        this.saveToken(jwtToken, user);
+        userService.saveToken(jwtToken, user);
 
         return jwtToken;
     }
 
-    private void saveToken(String jwtToken, User user) {
-        Tokens tokenEntity = new Tokens();
-        tokenEntity.setToken(jwtToken);
-        tokenEntity.setUser_id(user.getId());
 
-        LocalDateTime expirationDateTime = LocalDateTime.now().plusHours(24);
-        tokenEntity.setExpiration(Date.from(expirationDateTime.atZone(ZoneId.systemDefault()).toInstant()));
+    public String loginUser(String username, String password) {
+        // Retrieve the user details from the database
+        User user = userService.loadUserByUsername(username);
 
-        tokenRepository.save(tokenEntity);
+        // Check if the provided password matches the encoded password in the database
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            // Passwords match, generate JWT token for the authenticated user
+            String jwtToken = userService.generateJwtToken(user);
+
+            // Save the generated token for the user
+            userService.saveToken(jwtToken, user);
+
+            return jwtToken;
+        } else {
+            // Passwords don't match, throw an exception or return an error message
+            throw new IllegalArgumentException("Invalid credentials");
+        }
     }
 
 }
