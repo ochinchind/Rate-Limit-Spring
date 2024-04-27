@@ -19,12 +19,7 @@ public class AuthorizedRequestsSimulation extends Simulation  {
 
     HttpProtocolBuilder httpProtocol =
             http.baseUrl("http://localhost:8080")
-                    .acceptHeader("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
-                    .acceptLanguageHeader("en-US,en;q=0.5")
-                    .acceptEncodingHeader("gzip, deflate")
-                    .userAgentHeader(
-                            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/119.0"
-                    ).authorizationHeader("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhIiwiaWF0IjoxNzE0MTYxNzI5LCJleHAiOjE3MTQyODE3Mjl9.yGgZuluFyiTIwZAFMZuNy0_HWUyxLtFNDUU5DrxhoM1prdFvYBXhULDhfalf6wr9v26Ln9QzDtmh0itnF16Zfg");
+                    .authorizationHeader("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhIiwiaWF0IjoxNzE0MTYxNzI5LCJleHAiOjE3MTQyODE3Mjl9.yGgZuluFyiTIwZAFMZuNy0_HWUyxLtFNDUU5DrxhoM1prdFvYBXhULDhfalf6wr9v26Ln9QzDtmh0itnF16Zfg");
 
     ScenarioBuilder users = scenario("Users").exec(browse);
 

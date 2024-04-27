@@ -25,7 +25,7 @@ public class RolesController {
 
     @PostMapping("/assign-user")
     public String assignUser(@RequestBody RolesGiven rolesGiven) {
-        if (rolesGivenRepository.existsByRoleIdAndUserId(rolesGiven.getRoleId(), rolesGiven.getUserId())) {
+        if (rolesGivenRepository.existsByRoleIdAndUserId(rolesGiven.getRole_id(), rolesGiven.getUser_id())) {
             return "Assignment already exists!";
         }
 

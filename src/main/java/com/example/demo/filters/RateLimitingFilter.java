@@ -23,8 +23,8 @@ public class RateLimitingFilter extends GenericFilterBean {
     // Map to store Bucket4j instances for each IP address
     private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
 
-    // Configure rate limiting rules (e.g., 30 requests per minute)
-    private final Bandwidth limit = Bandwidth.classic(30, Refill.intervally(30, Duration.ofMinutes(1)));
+    // Configure rate limiting rules (e.g., 13 requests per minute)
+    private final Bandwidth limit = Bandwidth.classic(13, Refill.intervally(13, Duration.ofMinutes(1)));
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

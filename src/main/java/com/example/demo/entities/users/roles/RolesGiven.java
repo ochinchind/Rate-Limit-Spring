@@ -18,8 +18,8 @@ public class RolesGiven {
     private Long id;
 
     @Column(nullable = false, name = "user_id")
-    private Long userId;
+    private Long user_id;
 
     @Column(nullable = false, name = "role_id")
-    private Long roleId;
+    private Long role_id;
 }

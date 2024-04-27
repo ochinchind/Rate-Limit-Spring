@@ -63,9 +63,9 @@ public class PricingPlanService {
                 if (rolesGivenOptional.isPresent()) {
                     System.out.println("auth");
                     RolesGiven rolesGiven = rolesGivenOptional.get();
-                    if (Objects.equals(rolesGiven.getRoleId(), 1L)) {
+                    if (Objects.equals(rolesGiven.getRole_id(), 1L)) {
                         return PROFESSIONAL;
-                    } else if (Objects.equals(rolesGiven.getRoleId(), 2L)) {
+                    } else if (Objects.equals(rolesGiven.getRole_id(), 2L)) {
                         return BASIC;
                     }
                 }
