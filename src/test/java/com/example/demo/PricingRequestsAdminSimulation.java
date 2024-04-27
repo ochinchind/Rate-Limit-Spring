@@ -9,7 +9,7 @@ import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.core.CoreDsl.rampUsers;
 import static io.gatling.javaapi.http.HttpDsl.http;
 
-public class PricingRequestsSimulation extends Simulation {
+public class PricingRequestsAdminSimulation extends Simulation {
 
     ChainBuilder pricing =
             // Note how we force the counter name, so we can reuse it
