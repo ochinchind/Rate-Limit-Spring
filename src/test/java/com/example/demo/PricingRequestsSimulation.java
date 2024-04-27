@@ -1,19 +1,20 @@
 package com.example.demo;
 
+import io.gatling.javaapi.core.ChainBuilder;
+import io.gatling.javaapi.core.ScenarioBuilder;
+import io.gatling.javaapi.core.Simulation;
+import io.gatling.javaapi.http.HttpProtocolBuilder;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
-import static io.gatling.javaapi.http.HttpDsl.*;
+import static io.gatling.javaapi.core.CoreDsl.rampUsers;
+import static io.gatling.javaapi.http.HttpDsl.http;
 
-import io.gatling.javaapi.core.*;
-import io.gatling.javaapi.http.*;
+public class PricingRequestsSimulation extends Simulation {
 
-import java.util.concurrent.ThreadLocalRandom;
-public class AuthorizedRequestsSimulation extends Simulation  {
-
-    ChainBuilder browse =
+    ChainBuilder pricing =
             // Note how we force the counter name, so we can reuse it
-            repeat(15, "i").on(
-                    http("Page #{i}").get("/api/greet")
+            repeat(25, "i").on(
+                    http("Page #{i}").get("/api2/users/pricing")
                             .header("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhIiwiaWF0IjoxNzE0MTYxNzI5LCJleHAiOjE3MTQyODE3Mjl9.yGgZuluFyiTIwZAFMZuNy0_HWUyxLtFNDUU5DrxhoM1prdFvYBXhULDhfalf6wr9v26Ln9QzDtmh0itnF16Zfg"),
                     pause(1)
             );
@@ -22,7 +23,7 @@ public class AuthorizedRequestsSimulation extends Simulation  {
             http.baseUrl("http://localhost:8080")
                     .authorizationHeader("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhIiwiaWF0IjoxNzE0MTYxNzI5LCJleHAiOjE3MTQyODE3Mjl9.yGgZuluFyiTIwZAFMZuNy0_HWUyxLtFNDUU5DrxhoM1prdFvYBXhULDhfalf6wr9v26Ln9QzDtmh0itnF16Zfg");
 
-    ScenarioBuilder users = scenario("Users").exec(browse);
+    ScenarioBuilder users = scenario("Users").exec(pricing);
 
     {
         setUp(
