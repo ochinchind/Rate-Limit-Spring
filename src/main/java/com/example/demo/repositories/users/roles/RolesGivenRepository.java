@@ -7,8 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface RolesGivenRepository extends JpaRepository<RolesGiven, Long> {
-    @Query("SELECT COUNT(r) > 0 FROM RolesGiven r WHERE r.role_id = :roleId AND r.user_id = :userId")
+    @Query("SELECT COUNT(r) > 0 FROM RolesGiven r WHERE r.roleId = :roleId AND r.userId = :userId")
     boolean existsByRoleIdAndUserId(@Param("roleId") Long roleId, @Param("userId") Long userId);
+
+    Optional<RolesGiven> findByUserId(Long userId);
 }
