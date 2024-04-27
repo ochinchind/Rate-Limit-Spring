@@ -15,10 +15,12 @@ public class UsersSimulation  extends Simulation {
 
     ScenarioBuilder scn = scenario("UserSimulation")
             .exec(http("Generate Token")
-                    .get("/api/users/generate-token")) // Endpoint for generating token
+                    .get("/api/users/generate-token")
+                    .header("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhIiwiaWF0IjoxNzE0MTYxNzI5LCJleHAiOjE3MTQyODE3Mjl9.yGgZuluFyiTIwZAFMZuNy0_HWUyxLtFNDUU5DrxhoM1prdFvYBXhULDhfalf6wr9v26Ln9QzDtmh0itnF16Zfg")) // Endpoint for generating token
             .pause(1) // Pause between requests
             .repeat(10, "i").on(
-            http("Page #{i}").get("/api/users"),
+            http("Page #{i}").get("/api/users/1")
+                    .header("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhIiwiaWF0IjoxNzE0MTYxNzI5LCJleHAiOjE3MTQyODE3Mjl9.yGgZuluFyiTIwZAFMZuNy0_HWUyxLtFNDUU5DrxhoM1prdFvYBXhULDhfalf6wr9v26Ln9QzDtmh0itnF16Zfg"),
             pause(1)
             );
 
