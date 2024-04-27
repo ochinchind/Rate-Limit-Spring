@@ -27,6 +27,9 @@ services:
       - SPRING_FLYWAY_TABLE=flyway_schema_history
       - SPRING_FLYWAY_BASELINE-VERSION=0
       - SPRING_JPA_HIBERNATE_DDL-AUTO=validate
+    networks:
+      - my-network
+
   db:
     image: postgres
     container_name: db
@@ -38,6 +41,22 @@ services:
       - "5436:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    networks:
+      - my-network
 
 volumes:
   postgres-data:
+
+networks:
+  my-network:
+    driver: bridge
+    name: custom-network
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24
+          gateway: 172.16.238.1
+    attachable: true
+    internal: false
+    labels:
+      com.example.description: "Custom network for my application"

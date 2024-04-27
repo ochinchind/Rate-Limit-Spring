@@ -49,20 +49,18 @@ public class PricingPlanService {
 
     private PricingPlan resolvePlanFromApiKey(String apiKey) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("auth");
+
         if (authentication != null && authentication.isAuthenticated()) {
             Object principal = authentication.getPrincipal();
-            System.out.println("auth");
             if (principal instanceof UserDetails) {
-                System.out.println("auth");
                 User userDetails = (User) principal;
                 Long userId = userDetails.getId();
-                System.out.println(userId);
+
                 Optional<RolesGiven> rolesGivenOptional = rolesGivenRepository.findByUserId(userId);
-                System.out.println(rolesGivenOptional);
+
                 if (rolesGivenOptional.isPresent()) {
-                    System.out.println("auth");
                     RolesGiven rolesGiven = rolesGivenOptional.get();
+
                     if (Objects.equals(rolesGiven.getRole_id(), 1L)) {
                         return PROFESSIONAL;
                     } else if (Objects.equals(rolesGiven.getRole_id(), 2L)) {
